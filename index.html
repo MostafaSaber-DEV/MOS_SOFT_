@@ -149,6 +149,22 @@
             padding: 8px;
             border: 1px solid #ddd;
         }
+
+        /* Media query for mobile view */
+        @media (max-width: 768px) {
+            .cta {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .cta img {
+                max-width: 80%;
+                margin-bottom: 20px;
+            }
+            .cta .text {
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -158,6 +174,7 @@
     </div>
 
     <div class="cta">
+        <img src="ab.jpg" alt="أ/أحمد البدري">
         <div class="text">
             <h2>ابدأ في استعلام نتيجة الطلاب الآن</h2>
             <p>أدخل رقم الجلوس الخاص بك في الحقل أدناه للحصول على نتيجتك.</p>
@@ -172,7 +189,6 @@
                 <div id="result" class="result"></div>
             </div>
         </div>
-        <img src="ab.jpg" alt="أ/أحمد البدري">
     </div>
 
     <div class="footer">
@@ -240,35 +256,35 @@
                             <tr><th>اسم المجموعة</th><td>${escapeHtml(studentInfo['اسم المجموعة'])}</td></tr>
                             <tr><th>الكود</th><td>${escapeHtml(studentInfo['الكود'])}</td></tr>
                             <tr><th>الدرجة</th><td>${escapeHtml(studentInfo['الدرجة'])}</td></tr>
-                        </table>
-                    `;
+                        </table>`;
                 } else {
-                    resultDiv.innerHTML = `<p>لم يتم العثور على بيانات للطالب رقم ${escapeHtml(seatNumber)}</p>`;
+                    resultDiv.innerHTML = `<p>لم يتم العثور على نتيجة لهذا الرقم.</p>`;
                 }
-            }, 500); // Simulate loading time
+            }, 1000);
+        });
+
+        document.getElementById('darkModeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            document.querySelector('.form-container').classList.toggle('dark-mode');
+            document.querySelector('.navbar').classList.toggle('dark-mode');
+            document.querySelector('.footer').classList.toggle('dark-mode');
         });
 
         function sanitizeString(str) {
-            return str.replace(/[^\w\s\u0621-\u064A]/g, '');
+            return str.replace(/[^\w\s]/gi, '');
         }
 
         function escapeHtml(unsafe) {
-            return unsafe.replace(/&/g, "&amp;")
-                         .replace(/</g, "&lt;")
-                         .replace(/>/g, "&gt;")
-                         .replace(/"/g, "&quot;")
-                         .replace(/'/g, "&#039;");
+            return unsafe.replace(/[&<"']/g, function (m) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                }[m];
+            });
         }
-
-        // Dark Mode Toggle
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        darkModeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            document.querySelector('.form-container').classList.toggle('dark-mode');
-            document.querySelector('.footer').classList.toggle('dark-mode');
-            document.querySelector('.navbar').classList.toggle('dark-mode');
-        });
     </script>
-
 </body>
 </html>
+
